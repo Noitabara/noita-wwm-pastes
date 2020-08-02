@@ -2,7 +2,7 @@ import Mod from "mod/Mod";
 import Log from "utilities/Log";
 import StatusEffect, { IStatusEffectIconDescription } from "entity/status/StatusEffect";
 import { Stat } from "entity/IStats";
-import { ItemType, RecipeLevel } from "item/IItem"
+import { ItemType, RecipeLevel, ItemTypeGroup } from "item/IItem"
 import { RecipeComponent } from "item/Items"
 import { StatChangeReason, StatusType, EntityType, StatusEffectChangeReason } from "entity/IEntity";
 import { StatNotificationType } from "renderer/INotifier";
@@ -84,7 +84,7 @@ export default class Pastes extends Mod {
                 PasteBuffMinDura: item.minDur,
                 PasteBuffMaxDura: item.maxDur
             }
-
+            
             // We set the status here.
             player.setStatus(Pastes.INST.statusEffectStamBuff, true, StatusEffectChangeReason.Gained)
             // Remove the item from inventory after using it.
@@ -98,7 +98,9 @@ export default class Pastes extends Mod {
         weight: 0.5,
         recipe: {
             components: [
-                RecipeComponent(ItemType.Log, 1, 1, 1)
+                RecipeComponent(ItemTypeGroup.ContainerOfMedicinalWater, 1, 1, 0, true),
+                RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
+                RecipeComponent(ItemTypeGroup.Fruit, 1, 1, 0, true)
             ],
             // requiresFire: true,
             // Implement new skill for 1.0.0-beta?
@@ -106,7 +108,8 @@ export default class Pastes extends Mod {
             // Change to advanced later.
             level: RecipeLevel.Simple,
             reputation: 10
-        }
+        },
+        groups: [ItemTypeGroup.ContainerOfMedicinalWater]
     })
     public itemStamPaste: ItemType
 }
