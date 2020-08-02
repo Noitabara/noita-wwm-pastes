@@ -2,11 +2,14 @@ import Mod from "mod/Mod";
 import Log from "utilities/Log";
 import StatusEffect, { IStatusEffectIconDescription } from "entity/status/StatusEffect";
 import { Stat } from "entity/IStats";
+import { ItemType, RecipeLevel } from "item/IItem"
+import { RecipeComponent } from "item/Items"
 import { StatChangeReason, StatusType, EntityType, StatusEffectChangeReason } from "entity/IEntity";
 import { StatNotificationType } from "renderer/INotifier";
-import Register from "mod/ModRegistry";
+import Register, { Registry } from "mod/ModRegistry";
 import { Action } from "entity/action/Action";
 import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
+import { SkillType } from "entity/IHuman";
 
 let log: Log
 
@@ -89,4 +92,20 @@ export default class Pastes extends Mod {
         })
     )
     public readonly actionConsumeStamPaste: ActionType
+
+    @Register.item("StamPaste", {
+        use: [Registry<Pastes>().get("actionConsumeStamPaste")],
+        weight: 0.5,
+        recipe: {
+            components: [
+                RecipeComponent(ItemType.Log, 1, 1, 1)
+            ],
+            // Implement new skill for 1.0.0-beta?
+            skill: SkillType.Cooking,
+            // Change to advanced later.
+            level: RecipeLevel.Simple,
+            reputation: 10
+        }
+    })
+    public itemStamPaste: ItemType
 }
