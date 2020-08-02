@@ -11,6 +11,7 @@ import { Action } from "entity/action/Action";
 import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
 import { SkillType } from "entity/IHuman";
 import Translation from "language/Translation";
+import { DoodadTypeGroup } from "doodad/IDoodad";
 
 let log: Log
 
@@ -113,12 +114,12 @@ export default class Pastes extends Mod {
                 RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
                 RecipeComponent(ItemTypeGroup.Fruit, 1, 1, 0, true)
             ],
-            // requiredDoodad: DoodadTypeGroup.LitKiln,
+            requiredDoodad: DoodadTypeGroup.LitKiln,
             // Implement new skill for 1.0.0-beta?
             skill: SkillType.Cooking,
             // Change to advanced later.
-            level: RecipeLevel.Simple,
-            reputation: -10
+            level: RecipeLevel.Advanced,
+            reputation: 0
         },
         groups: [ItemTypeGroup.CookedFood]
     })

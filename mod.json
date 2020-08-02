@@ -1,7 +1,7 @@
 {
 	"name": "Buff Pastes",
 	"description": "Paste(s) that can be consumed to provide buffs that function over time",
-	"version": "0.0.1",
+	"version": "1.0.0-alpha.1",
 	"author": "Noita",
 	"file": "out/Mod",
 	"multiplayer": "compatible",
