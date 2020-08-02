@@ -2,9 +2,11 @@ import Mod from "mod/Mod";
 import Log from "utilities/Log";
 import StatusEffect, { IStatusEffectIconDescription } from "entity/status/StatusEffect";
 import { Stat } from "entity/IStats";
-import { StatChangeReason, StatusType } from "entity/IEntity";
+import { StatChangeReason, StatusType, EntityType, StatusEffectChangeReason } from "entity/IEntity";
 import { StatNotificationType } from "renderer/INotifier";
 import Register from "mod/ModRegistry";
+import { Action } from "entity/action/Action";
+import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
 
 let log: Log
 
@@ -67,4 +69,24 @@ export default class Pastes extends Mod {
     @Register.statusEffect("StamBuff", StaminaBuff)
     public statusEffectStamBuff: StatusType
     
+    @Register.action("ConsumeStamPaste", new Action(ActionArgument.Item)
+        .setUsableBy(EntityType.Player)
+        .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
+        .setHandler((action, item) => {
+            let player = action.executor
+            // Initalize/reset the buff data based on the item used here.
+            Pastes.INST.buffData[player.identifier] = {
+                PasteBuffTick: 0,
+                PasteBuffQuality: item.quality!,
+                PasteBuffMinDura: item.minDur,
+                PasteBuffMaxDura: item.maxDur
+            }
+
+            // We set the status here.
+            player.setStatus(Pastes.INST.statusEffectStamBuff, true, StatusEffectChangeReason.Gained)
+            // Remove the item from inventory after using it.
+            itemManager.remove(item)
+        })
+    )
+    public readonly actionConsumeStamPaste: ActionType
 }
