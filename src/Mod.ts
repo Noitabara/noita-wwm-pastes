@@ -4,6 +4,7 @@ import StatusEffect, { IStatusEffectIconDescription } from "entity/status/Status
 import { Stat } from "entity/IStats";
 import { StatChangeReason, StatusType } from "entity/IEntity";
 import { StatNotificationType } from "renderer/INotifier";
+import Register from "mod/ModRegistry";
 
 let log: Log
 
@@ -63,5 +64,7 @@ export default class Pastes extends Mod {
     @Mod.instance<Pastes>("Buff Pastes")
     public static readonly INST: Pastes
 
+    @Register.statusEffect("StamBuff", StaminaBuff)
+    public statusEffectStamBuff: StatusType
     
 }
