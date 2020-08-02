@@ -109,7 +109,7 @@ export default class Pastes extends Mod {
             level: RecipeLevel.Simple,
             reputation: 10
         },
-        groups: [ItemTypeGroup.ContainerOfMedicinalWater]
+        groups: [ItemTypeGroup.CookedFood]
     })
     public itemStamPaste: ItemType
 }
