@@ -10,6 +10,7 @@ import Register, { Registry } from "mod/ModRegistry";
 import { Action } from "entity/action/Action";
 import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
 import { SkillType } from "entity/IHuman";
+import Translation from "language/Translation";
 
 let log: Log
 
@@ -29,7 +30,8 @@ class StaminaBuff extends StatusEffect {
     getIcon(): IStatusEffectIconDescription {
         // Check in steam deploy for where this is actually resolving. Should know pretty fast that it's failing lol.
         return {
-            path: '../../mods/buff_pastes/static/image/item/stambuff_8.png'
+            path: '../../mods/buff_pastes/static/image/item/stampaste_8.png',
+            frames: 5
         }
     }
     @Override
@@ -55,6 +57,13 @@ class StaminaBuff extends StatusEffect {
             return true
         }
         return false
+    }
+    @Override
+    getDescription(): Translation {
+        let locPlayersData = Pastes.INST.buffData[this.entity.asPlayer!.identifier]
+        let effectMultiplier = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality) + 1)
+        return super.getDescription()
+            .addArgs(effectMultiplier)
     }
 }
 
@@ -93,6 +102,8 @@ export default class Pastes extends Mod {
     )
     public readonly actionConsumeStamPaste: ActionType
 
+    // Consider making it a pastrie(?) instead of a paste. Create the paste first, then bake it into a pastrie.
+    // Doing this means we could use eggs, and makes a bit more sense than carrying around a sticky paste in your pockets.
     @Register.item("StamPaste", {
         use: [Registry<Pastes>().get("actionConsumeStamPaste")],
         weight: 0.5,
@@ -102,12 +113,12 @@ export default class Pastes extends Mod {
                 RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
                 RecipeComponent(ItemTypeGroup.Fruit, 1, 1, 0, true)
             ],
-            // requiresFire: true,
+            // requiredDoodad: DoodadTypeGroup.LitKiln,
             // Implement new skill for 1.0.0-beta?
             skill: SkillType.Cooking,
             // Change to advanced later.
             level: RecipeLevel.Simple,
-            reputation: 10
+            reputation: -10
         },
         groups: [ItemTypeGroup.CookedFood]
     })
