@@ -42,7 +42,7 @@ class StaminaBuff extends StatusEffect {
         // Increase the stat Stamina by the effect multipler
         this.entity.asPlayer?.stat.increase(Stat.Stamina, effectMultiplier, StatChangeReason.Normal)
         // call the notifyStat function to indicate that the stat has increased by the effect multiplier
-        this.entity.asPlayer?.notifyStat(StatNotificationType.Metabolism, effectMultiplier)
+        this.entity.asPlayer?.notifyStat(StatNotificationType.Stamina, effectMultiplier)
 
         // Iterate the buff tick by 1 because infinite buffs would be a bit OP.
         locPlayersData.PasteBuffTick++
@@ -100,6 +100,7 @@ export default class Pastes extends Mod {
             components: [
                 RecipeComponent(ItemType.Log, 1, 1, 1)
             ],
+            // requiresFire: true,
             // Implement new skill for 1.0.0-beta?
             skill: SkillType.Cooking,
             // Change to advanced later.
