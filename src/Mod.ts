@@ -29,6 +29,7 @@ interface IUsersBuffData {
 
 // Testing custom tickrate idea
 interface IUserBuffObject {
+    player_ident: string,
     ticker: number,
     max_ticker: number,
     quality: number,
@@ -95,8 +96,12 @@ export default class Pastes extends Mod {
 
     @Override @HookMethod
     public onGameTickStart() {
-        log.info("OUR TICK BE STARTING")
-        // game.getPlayerByIdentifier('', false)
+        if (game.time.ticks % 10 == 0) {
+            log.info('Tick happens every 10 ticks.')
+            this.hungerBuffStore.forEach(user => {
+                log.info(user)
+            })
+        }
     }
 
     @Mod.instance<Pastes>("Buff Pastes")
@@ -109,7 +114,17 @@ export default class Pastes extends Mod {
         .setUsableBy(EntityType.Player)
         .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
         .setHandler((action, item) => {
-
+            const player = action.executor
+            // This action is called via activing the test item.
+            // We will init the object to be pushed to it's respective buff pool at this time.
+            Pastes.INST.hungerBuffStore.push({
+                player_ident: player.identifier,
+                ticker: 0,
+                max_ticker: 5,
+                max_durability: item.maxDur,
+                min_durability: item.minDur,
+                quality: item.quality!
+            })
         })
     )
     public readonly actionTestAction: ActionType
