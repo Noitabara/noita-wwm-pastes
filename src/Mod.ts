@@ -96,6 +96,8 @@ export default class Pastes extends Mod {
 
     @Override @HookMethod
     public onGameTickStart() {
+        // Consider adding option for allowing users to configure how often they want the tick to pass.
+        // Setting for changing the modulus number.
         if (game.time.ticks % 10 == 0) {
             log.info('Tick happens every 10 ticks.')
             this.hungerBuffStore.forEach(user => {
@@ -109,25 +111,6 @@ export default class Pastes extends Mod {
 
     @Register.statusEffect("StamBuff", StaminaBuff)
     public statusEffectStamBuff: StatusType
-    
-    @Register.action("TestAction", new Action(ActionArgument.Item)
-        .setUsableBy(EntityType.Player)
-        .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
-        .setHandler((action, item) => {
-            const player = action.executor
-            // This action is called via activing the test item.
-            // We will init the object to be pushed to it's respective buff pool at this time.
-            Pastes.INST.hungerBuffStore.push({
-                player_ident: player.identifier,
-                ticker: 0,
-                max_ticker: 5,
-                max_durability: item.maxDur,
-                min_durability: item.minDur,
-                quality: item.quality!
-            })
-        })
-    )
-    public readonly actionTestAction: ActionType
 
     @Register.action("ConsumeStamPaste", new Action(ActionArgument.Item)
         .setUsableBy(EntityType.Player)
@@ -171,6 +154,33 @@ export default class Pastes extends Mod {
         groups: [ItemTypeGroup.CookedFood]
     })
     public itemStamPaste: ItemType
+
+    @Register.action("TestExecuteAction", new Action(ActionArgument.Item)
+        .setUsableBy(EntityType.Player)
+        .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
+        .setHandler((action, item) => {
+            
+        })
+    )
+    public readonly actionTestExecuteAction: ActionType
+    @Register.action("TestAction", new Action(ActionArgument.Item)
+        .setUsableBy(EntityType.Player)
+        .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
+        .setHandler((action, item) => {
+            const player = action.executor
+            // This action is called via activing the test item.
+            // We will init the object to be pushed to it's respective buff pool at this time.
+            Pastes.INST.hungerBuffStore.push({
+                player_ident: player.identifier,
+                ticker: 0,
+                max_ticker: 5,
+                max_durability: item.maxDur,
+                min_durability: item.minDur,
+                quality: item.quality!
+            })
+        })
+    )
+    public readonly actionTestAction: ActionType
 
     @Register.item("Test", {
         use: [Registry<Pastes>().get("actionTestAction")],
