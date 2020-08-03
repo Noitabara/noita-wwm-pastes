@@ -13,6 +13,8 @@ import { SkillType } from "entity/IHuman";
 import Translation from "language/Translation";
 import { DoodadTypeGroup } from "doodad/IDoodad";
 import { HookMethod } from "mod/IHookHost";
+import ActionExecutor from "entity/action/ActionExecutor";
+import Player from "entity/player/Player";
 
 let log: Log
 
@@ -102,6 +104,7 @@ export default class Pastes extends Mod {
             log.info('Tick happens every 10 ticks.')
             this.hungerBuffStore.forEach(user => {
                 log.info(user)
+                ActionExecutor.get(Pastes.INST.actionTestExecuteAction).execute(localPlayer, game.getPlayerByIdentifier(user.player_ident)!.asPlayer, user.max_ticker)
             })
         }
     }
@@ -155,14 +158,16 @@ export default class Pastes extends Mod {
     })
     public itemStamPaste: ItemType
 
-    @Register.action("TestExecuteAction", new Action(ActionArgument.Item)
+    @Register.action("TestExecuteAction", new Action(ActionArgument.Player, ActionArgument.Number)
         .setUsableBy(EntityType.Player)
         .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
-        .setHandler((action, item) => {
+        .setHandler((action, player: Player, value: number) => {
             
+            log.info("kek", player.inventory, value)
         })
     )
     public readonly actionTestExecuteAction: ActionType
+
     @Register.action("TestAction", new Action(ActionArgument.Item)
         .setUsableBy(EntityType.Player)
         .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
