@@ -27,14 +27,18 @@ interface IUsersBuffData {
     [key: string]: IStamPasteData
 }
 
-interface IUserBuffBool {
-    hunger: boolean,
-    thirst: boolean
+// Testing custom tickrate idea
+interface IUserBuffObject {
+    ticker: number,
+    max_ticker: number,
+    quality: number,
+    max_durability: number,
+    min_durability: number
 }
 
-interface IUserBuffBoolBase {
-    [key: string]: IUserBuffBool
-}
+interface IUserHungerBuffObjects extends Array<IUserBuffObject>{}
+interface IUserThirstBuffObjects extends Array<IUserBuffObject>{}
+// End testing custom tickrate idea
 
 class StaminaBuff extends StatusEffect {
     @Override
@@ -80,7 +84,9 @@ class StaminaBuff extends StatusEffect {
 
 export default class Pastes extends Mod {
     public buffData: IUsersBuffData = {}
-    public userBuffBool: IUserBuffBoolBase = {}
+
+    public hungerBuffStore: IUserHungerBuffObjects = []
+    public thirstBuffStore: IUserThirstBuffObjects = []
 
     public onInitialize() {
         log = this.getLog()
