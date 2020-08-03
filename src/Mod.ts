@@ -12,6 +12,7 @@ import { ActionArgument, ActionType, ActionUsability } from "entity/action/IActi
 import { SkillType } from "entity/IHuman";
 import Translation from "language/Translation";
 import { DoodadTypeGroup } from "doodad/IDoodad";
+import { HookMethod } from "mod/IHookHost";
 
 let log: Log
 
@@ -24,6 +25,15 @@ interface IStamPasteData {
 
 interface IUsersBuffData {
     [key: string]: IStamPasteData
+}
+
+interface IUserBuffBool {
+    hunger: boolean,
+    thirst: boolean
+}
+
+interface IUserBuffBoolBase {
+    [key: string]: IUserBuffBool
 }
 
 class StaminaBuff extends StatusEffect {
@@ -70,10 +80,17 @@ class StaminaBuff extends StatusEffect {
 
 export default class Pastes extends Mod {
     public buffData: IUsersBuffData = {}
+    public userBuffBool: IUserBuffBoolBase = {}
 
     public onInitialize() {
         log = this.getLog()
         log.info('Hello, sweet world.')
+    }
+
+    @Override @HookMethod
+    public onGameTickStart() {
+        log.info("OUR TICK BE STARTING")
+        // game.getPlayerByIdentifier('', false)
     }
 
     @Mod.instance<Pastes>("Buff Pastes")
@@ -82,6 +99,15 @@ export default class Pastes extends Mod {
     @Register.statusEffect("StamBuff", StaminaBuff)
     public statusEffectStamBuff: StatusType
     
+    @Register.action("TestAction", new Action(ActionArgument.Item)
+        .setUsableBy(EntityType.Player)
+        .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
+        .setHandler((action, item) => {
+
+        })
+    )
+    public readonly actionTestAction: ActionType
+
     @Register.action("ConsumeStamPaste", new Action(ActionArgument.Item)
         .setUsableBy(EntityType.Player)
         .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
@@ -124,4 +150,19 @@ export default class Pastes extends Mod {
         groups: [ItemTypeGroup.CookedFood]
     })
     public itemStamPaste: ItemType
+
+    @Register.item("Test", {
+        use: [Registry<Pastes>().get("actionTestAction")],
+        weight: 0.5,
+        recipe: {
+            components: [
+                RecipeComponent(ItemType.Log, 1, 1, 0, true),
+            ],
+            skill: SkillType.Cooking,
+            // Change to advanced later.
+            level: RecipeLevel.Simple,
+            reputation: 0
+        },
+    })
+    public itemTest: ItemType
 }
