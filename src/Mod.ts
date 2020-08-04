@@ -41,8 +41,8 @@ interface IUserBuffObject {
     min_durability: number
 }
 
-interface IUserHungerBuffObjects extends Array<IUserBuffObject>{}
-interface IUserThirstBuffObjects extends Array<IUserBuffObject>{}
+interface IUserHungerBuffObjects extends Array<IUserBuffObject> { }
+interface IUserThirstBuffObjects extends Array<IUserBuffObject> { }
 // End testing custom tickrate idea
 
 class StaminaBuff extends StatusEffect {
@@ -120,17 +120,19 @@ export default class Pastes extends Mod {
         if (game.time.ticks % 10 == 0) {
             log.info('Tick happens every 10 ticks.')
             this.hungerBuffStore.forEach((user, index) => {
-                let thisPlayer = game.getPlayerByIdentifier(user.player_ident)!.asPlayer
-                // Increase the players ticker property by 1
-                this.hungerBuffStore[index].ticker++
-                // Execute the action on the player passed in. Consider finding a better way than game.getPlayerByIdentifier for fear of it being slow, but i'm not sure.
-                ActionExecutor.get(Pastes.INST.actionTestExecuteAction).execute(localPlayer, thisPlayer, user.max_ticker)
-                // If the players ticker is higher than the alotted max ticker, remove their status effect and delete them from the array
-                if (user.ticker >= user.max_ticker) {
-                    // Code to remove the status effect from the player.
-                    thisPlayer.setStatus(Pastes.INST.statusEffectHungerBuff, false, StatusEffectChangeReason.Passed)
-                    // Code to remove the players object from the array.
-                    this.hungerBuffStore.splice(index, 1)
+                let thisPlayer = game.getPlayerByIdentifier(user.player_ident, false)?.asPlayer
+                if (thisPlayer) {
+                    // Increase the players ticker property by 1
+                    this.hungerBuffStore[index].ticker++
+                    // Execute the action on the player passed in. Consider finding a better way than game.getPlayerByIdentifier for fear of it being slow, but i'm not sure.
+                    ActionExecutor.get(Pastes.INST.actionTestExecuteAction).execute(localPlayer, thisPlayer, user.max_ticker)
+                    // If the players ticker is higher than the alotted max ticker, remove their status effect and delete them from the array
+                    if (user.ticker >= user.max_ticker) {
+                        // Code to remove the status effect from the player.
+                        thisPlayer.setStatus(Pastes.INST.statusEffectHungerBuff, false, StatusEffectChangeReason.Passed)
+                        // Code to remove the players object from the array.
+                        this.hungerBuffStore.splice(index, 1)
+                    }
                 }
             })
             // Loggy Bois
@@ -157,7 +159,7 @@ export default class Pastes extends Mod {
                 PasteBuffMinDura: item.minDur,
                 PasteBuffMaxDura: item.maxDur
             }
-            
+
             // We set the status here.
             player.setStatus(Pastes.INST.statusEffectStamBuff, true, StatusEffectChangeReason.Gained)
             // Remove the item from inventory after using it.
@@ -200,8 +202,8 @@ export default class Pastes extends Mod {
         .setHandler((action, player: Player, value: number) => {
             player.stat.increase(Stat.Hunger, 1, StatChangeReason.Normal)
             player.notifyStat(StatNotificationType.Metabolism, 1)
-            player.stat.increase(Stat.Hunger, 1, StatChangeReason.Normal)
-            player.notifyStat(StatNotificationType.Metabolism, 1)
+            player.stat.increase(Stat.Thirst, 1, StatChangeReason.Normal)
+            player.notifyStat(StatNotificationType.Thirst, 1)
             // log.info("kek", player.inventory, value)
         })
     )
