@@ -95,6 +95,11 @@ class HungerBuff extends StatusEffect {
             frames: 1
         }
     }
+    @Override
+    onPassed(): void {
+        const hBS = Pastes.INST.hungerBuffStore
+        hBS.splice(hBS.findIndex(eachPlayer => eachPlayer.player_ident == this.entity.asPlayer!.identifier), 1)
+    }
 }
 
 export default class Pastes extends Mod {
@@ -142,7 +147,7 @@ export default class Pastes extends Mod {
 
     @Register.action("ConsumeStamPaste", new Action(ActionArgument.Item)
         .setUsableBy(EntityType.Player)
-        .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
+        .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
         .setHandler((action, item) => {
             let player = action.executor
             // Initalize/reset the buff data based on the item used here.
@@ -191,8 +196,10 @@ export default class Pastes extends Mod {
 
     @Register.action("TestExecuteAction", new Action(ActionArgument.Player, ActionArgument.Number)
         .setUsableBy(EntityType.Player)
-        .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
+        .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
         .setHandler((action, player: Player, value: number) => {
+            player.stat.increase(Stat.Hunger, 1, StatChangeReason.Normal)
+            player.notifyStat(StatNotificationType.Metabolism, 1)
             player.stat.increase(Stat.Hunger, 1, StatChangeReason.Normal)
             player.notifyStat(StatNotificationType.Metabolism, 1)
             // log.info("kek", player.inventory, value)
@@ -202,7 +209,7 @@ export default class Pastes extends Mod {
 
     @Register.action("TestAction", new Action(ActionArgument.Item)
         .setUsableBy(EntityType.Player)
-        .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
+        .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
         .setHandler((action, item) => {
             const player = action.executor
             // Should be fix for multiple usage of item
