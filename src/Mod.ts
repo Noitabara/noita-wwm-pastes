@@ -16,6 +16,8 @@ import { HookMethod } from "mod/IHookHost";
 import ActionExecutor from "entity/action/ActionExecutor";
 import Player from "entity/player/Player";
 
+import HungerBuff from './Status_Effects/hungerStatusEffect'
+
 let log: Log
 
 interface IStamPasteData {
@@ -102,10 +104,17 @@ export default class Pastes extends Mod {
         // Setting for changing the modulus number.
         if (game.time.ticks % 10 == 0) {
             log.info('Tick happens every 10 ticks.')
-            this.hungerBuffStore.forEach(user => {
-                log.info(user)
-                ActionExecutor.get(Pastes.INST.actionTestExecuteAction).execute(localPlayer, game.getPlayerByIdentifier(user.player_ident)!.asPlayer, user.max_ticker)
+            this.hungerBuffStore.forEach((user, index) => {
+                let thisPlayer = game.getPlayerByIdentifier(user.player_ident)!.asPlayer
+                if (user.ticker >= user.max_ticker) {
+                    thisPlayer.setStatus(Pastes.INST.statusEffectHungerBuff, false, StatusEffectChangeReason.Passed)
+                }
+                this.hungerBuffStore[index].ticker++
+
+                // Execute the action on the player passed in. Consider finding a better way than game.getPlayerByIdentifier for fear of it being slow, but i'm not sure.
+                ActionExecutor.get(Pastes.INST.actionTestExecuteAction).execute(localPlayer, thisPlayer, user.max_ticker)
             })
+            this.hungerBuffStore.spliceWhere(ex => ex.ticker >= ex.max_ticker)
         }
     }
 
@@ -158,6 +167,12 @@ export default class Pastes extends Mod {
     })
     public itemStamPaste: ItemType
 
+
+    // Testing stuff below here.
+
+    @Register.statusEffect("HungerBuff", HungerBuff)
+    public statusEffectHungerBuff: StatusType
+
     @Register.action("TestExecuteAction", new Action(ActionArgument.Player, ActionArgument.Number)
         .setUsableBy(EntityType.Player)
         .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
@@ -183,6 +198,8 @@ export default class Pastes extends Mod {
                 min_durability: item.minDur,
                 quality: item.quality!
             })
+            // Apply the prefered status here.
+            player.setStatus(Pastes.INST.statusEffectHungerBuff, true, StatusEffectChangeReason.Gained)
         })
     )
     public readonly actionTestAction: ActionType

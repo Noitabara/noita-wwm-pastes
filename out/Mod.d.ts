@@ -33,6 +33,7 @@ export default class Pastes extends Mod {
     statusEffectStamBuff: StatusType;
     readonly actionConsumeStamPaste: ActionType;
     itemStamPaste: ItemType;
+    statusEffectHungerBuff: StatusType;
     readonly actionTestExecuteAction: ActionType;
     readonly actionTestAction: ActionType;
     itemTest: ItemType;
