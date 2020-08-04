@@ -122,6 +122,10 @@ export default class Pastes extends Mod {
             log.info('Tick happens every 10 ticks.')
             this.hungerBuffStore.forEach((user, index) => {
                 let thisPlayer = game.getPlayerByIdentifier(user.player_ident, false)?.asPlayer
+                // Remove the player from the pool if they are a ghost, aka, dead. Might cause issues if we are considered a ghost while alive.
+                if (thisPlayer!.isGhost()) {
+                    this.hungerBuffStore.splice(index, 1)
+                }
                 if (thisPlayer) {
                     // Increase the players ticker property by 1
                     this.hungerBuffStore[index].ticker++
