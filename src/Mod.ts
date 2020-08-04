@@ -16,7 +16,7 @@ import { HookMethod } from "mod/IHookHost";
 import ActionExecutor from "entity/action/ActionExecutor";
 import Player from "entity/player/Player";
 
-import HungerBuff from './Status_Effects/hungerStatusEffect'
+// import HungerBuff from './Status_Effects/hungerStatusEffect'
 
 let log: Log
 
@@ -87,6 +87,16 @@ class StaminaBuff extends StatusEffect {
     }
 }
 
+class HungerBuff extends StatusEffect {
+    @Override
+    getIcon(): IStatusEffectIconDescription {
+        return {
+            path: '../../mods/buff_pastes/static/image/item/test_8.png',
+            frames: 1
+        }
+    }
+}
+
 export default class Pastes extends Mod {
     public buffData: IUsersBuffData = {}
 
@@ -114,6 +124,7 @@ export default class Pastes extends Mod {
                 // Execute the action on the player passed in. Consider finding a better way than game.getPlayerByIdentifier for fear of it being slow, but i'm not sure.
                 ActionExecutor.get(Pastes.INST.actionTestExecuteAction).execute(localPlayer, thisPlayer, user.max_ticker)
             })
+            log.info(this.hungerBuffStore)
             this.hungerBuffStore.spliceWhere(ex => ex.ticker >= ex.max_ticker)
         }
     }
