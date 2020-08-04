@@ -97,6 +97,7 @@ class HungerBuff extends StatusEffect {
     }
     @Override
     onPassed(): void {
+        log.info('The effect has passed.')
         const hBS = Pastes.INST.hungerBuffStore
         hBS.splice(hBS.findIndex(eachPlayer => eachPlayer.player_ident == this.entity.asPlayer!.identifier), 1)
     }
