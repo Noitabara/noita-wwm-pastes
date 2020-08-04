@@ -116,16 +116,20 @@ export default class Pastes extends Mod {
             log.info('Tick happens every 10 ticks.')
             this.hungerBuffStore.forEach((user, index) => {
                 let thisPlayer = game.getPlayerByIdentifier(user.player_ident)!.asPlayer
-                if (user.ticker >= user.max_ticker) {
-                    thisPlayer.setStatus(Pastes.INST.statusEffectHungerBuff, false, StatusEffectChangeReason.Passed)
-                }
+                // Increase the players ticker property by 1
                 this.hungerBuffStore[index].ticker++
-
                 // Execute the action on the player passed in. Consider finding a better way than game.getPlayerByIdentifier for fear of it being slow, but i'm not sure.
                 ActionExecutor.get(Pastes.INST.actionTestExecuteAction).execute(localPlayer, thisPlayer, user.max_ticker)
+                // If the players ticker is higher than the alotted max ticker, remove their status effect and delete them from the array
+                if (user.ticker >= user.max_ticker) {
+                    // Code to remove the status effect from the player.
+                    thisPlayer.setStatus(Pastes.INST.statusEffectHungerBuff, false, StatusEffectChangeReason.Passed)
+                    // Code to remove the players object from the array.
+                    this.hungerBuffStore.splice(index, 1)
+                }
             })
+            // Loggy Bois
             log.info(this.hungerBuffStore)
-            this.hungerBuffStore.spliceWhere(ex => ex.ticker >= ex.max_ticker)
         }
     }
 
@@ -188,8 +192,9 @@ export default class Pastes extends Mod {
         .setUsableBy(EntityType.Player)
         .setUsableWhen(ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
         .setHandler((action, player: Player, value: number) => {
-            
-            log.info("kek", player.inventory, value)
+            player.stat.increase(Stat.Hunger, 1, StatChangeReason.Normal)
+            player.notifyStat(StatNotificationType.Metabolism, 1)
+            // log.info("kek", player.inventory, value)
         })
     )
     public readonly actionTestExecuteAction: ActionType
