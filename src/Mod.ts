@@ -206,7 +206,7 @@ export default class Pastes extends Mod {
         .setHandler((action, item) => {
             const player = action.executor
             // Should be fix for multiple usage of item
-            if (Pastes.INST.hungerBuffStore.findIndex(pl => pl.player_ident == player.identifier)) return
+            if (Pastes.INST.hungerBuffStore.findIndex(pl => pl.player_ident == player.identifier) !== -1) return
             // This action is called via activing the test item.
             // We will init the object to be pushed to it's respective buff pool at this time.
             Pastes.INST.hungerBuffStore.push({
