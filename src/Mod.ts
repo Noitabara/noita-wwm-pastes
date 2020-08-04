@@ -130,6 +130,7 @@ export default class Pastes extends Mod {
             })
             // Loggy Bois
             log.info(this.hungerBuffStore)
+            log.info(this.actionTestExecuteAction, Pastes.INST.actionTestExecuteAction)
         }
     }
 
