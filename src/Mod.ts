@@ -68,7 +68,7 @@ class StaminaBuff extends StatusEffect {
         // total calc from buffCalc, if less than 1, return 1, else base-1 from max durability multiplied by 5 as a treat for those who
         // use good quality ingredients :)
         const buffDuration = (buffCalc > 1 ? buffCalc : 1) * 5
-        log.info('buffDuration Resolves: ', buffDuration)
+        log.info('buffDuration Resolves: ', `${locPlayersData.PasteBuffTick}/${buffDuration}`)
         // If local buff tick(iterated in onTick) greater or equal to buffDuration, set the players buffTick to 0 and remove the buff
         // else keep on truckin.
         if (locPlayersData.PasteBuffTick >= buffDuration) {
