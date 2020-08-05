@@ -50,7 +50,7 @@ class StaminaBuff extends StatusEffect {
     getIcon(): IStatusEffectIconDescription {
         // Check in steam deploy for where this is actually resolving. Should know pretty fast that it's failing lol.
         return {
-            path: '../../mods/buff_pastes/static/image/item/stampaste_8.png',
+            path: '../../mods/noita-wwm-pastes/static/image/item/stampaste_8.png',
             frames: 5
         }
     }
