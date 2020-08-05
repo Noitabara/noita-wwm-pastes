@@ -83,7 +83,7 @@ class StaminaBuff extends StatusEffect {
     getDescription(): Translation {
         const locPlayersData = Pastes.INST.buffData[this.entity.asPlayer!.identifier]
         const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality) + 1)
-        const buffDuration = (Math.floor(locPlayersData.PasteBuffMaxDura/10)*2 > 1 ? Math.floor(locPlayersData.PasteBuffMaxDura/10)*2 : 1) * 2
+        const buffDuration = ((Math.floor(locPlayersData.PasteBuffMaxDura/10)*2) > 1 ? Math.floor(locPlayersData.PasteBuffMaxDura/10)*2 : 1) * 5
         return super.getDescription()
             .addArgs(effectTickAmount)
             .addArgs(this.tickrate)

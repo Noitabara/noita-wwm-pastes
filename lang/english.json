@@ -8,7 +8,7 @@
 			"modBuffPastesStamPaste": ["Mystical Stamina Paste", "Consume this beautiful paste, to gain a buff to your stamina!"]
 		},
 		"statusEffect": {
-			"modBuffPastesStamBuff": ["Stamina Buff!", "buff", "You've got a buff to your Stamina!\nIt will regenerate by {0} every {1} ticks for {3} iterations!.\n"]
+			"modBuffPastesStamBuff": ["Stamina Buff!", "buff", "You've got a buff to your Stamina!\nIt will regenerate {0} every {1} ticks for {2} iterations!"]
 		}
 	}
 }
