@@ -115,6 +115,7 @@ export default class Pastes extends Mod {
 
             // We set the status here.
             player.setStatus(Pastes.INST.statusEffectStamBuff, true, StatusEffectChangeReason.Gained)
+            log.info(`Max durablity at ${item.quality}:`, game.getQualityDurabilityBonus(item.quality!, itemManager.getDefaultDurability(player, item.weight, item.type, true), true))
             // Remove the item from inventory after using it.
             itemManager.remove(item)
         })
