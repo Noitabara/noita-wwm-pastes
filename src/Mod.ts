@@ -28,7 +28,7 @@ interface IUsersBuffData {
 class StaminaBuff extends StatusEffect {
     @Override
     getEffectRate(): number {
-        return 10
+        return 2
     }
     @Override
     getBadness(): StatusEffectBadness {
