@@ -28,7 +28,7 @@ interface IUsersBuffData {
 class StaminaBuff extends StatusEffect {
     @Override
     getEffectRate(): number {
-        return 15
+        return 10
     }
     @Override
     getBadness(): StatusEffectBadness {
@@ -128,10 +128,10 @@ export default class Pastes extends Mod {
         weight: 0.5,
         recipe: {
             components: [
-                RecipeComponent(ItemType.Log, 1, 1, 0, true)
-                // RecipeComponent(ItemType.Dough, 1, 1, 0, true),
-                // RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
-                // RecipeComponent(ItemTypeGroup.Fruit, 1, 1, 0, true)
+                // RecipeComponent(ItemType.Log, 1, 1, 0, true)
+                RecipeComponent(ItemType.Dough, 1, 1, 0, true),
+                RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
+                RecipeComponent(ItemTypeGroup.Fruit, 1, 1, 0, true)
                 
             ],
             // requiredDoodad: DoodadTypeGroup.LitKiln,
