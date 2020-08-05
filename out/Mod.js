@@ -12,9 +12,9 @@ define(["require", "exports", "mod/Mod", "entity/status/StatusEffect", "entity/I
         getOptions() {
             return {
                 untreatable: true,
-                effectRateMultiplier: 5,
+                effectRateMultiplier: 0,
                 startWith: false,
-                effectMultiplier: 0,
+                effectMultiplier: 5,
                 passChanceMultiplier: 0
             };
         }

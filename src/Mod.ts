@@ -31,9 +31,9 @@ class StaminaBuff extends StatusEffect {
     getOptions(): IGameOptionsStatusEffect {
         return {
             untreatable: true,
-            effectRateMultiplier: 5,
+            effectRateMultiplier: 0,
             startWith: false,
-            effectMultiplier: 0,
+            effectMultiplier: 5,
             passChanceMultiplier: 0
         }
     }
