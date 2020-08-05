@@ -67,6 +67,7 @@ class StaminaBuff extends StatusEffect {
     }
     @Override
     onTick(): void {
+        log.info(game.time.ticks)
         // Refrences the buffData variable in the Pastes mod class.
         let locPlayersData = Pastes.INST.buffData[this.entity.asPlayer!.identifier]
 
