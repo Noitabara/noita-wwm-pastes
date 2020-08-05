@@ -63,7 +63,7 @@ class StaminaBuff extends StatusEffect {
         // Stored ref to player data in locPlayersData
         const locPlayersData: IStamPasteData = Pastes.INST.buffData[this.entity.asPlayer!.identifier]
         // base-1 from max durability
-        const buffCalc = Math.floor(locPlayersData.PasteBuffMaxDura / 100)
+        const buffCalc = Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2
         log.info('buffCalc Resolves: ', buffCalc)
         // total calc from buffCalc, if less than 1, return 1, else base-1 from max durability multiplied by 5 as a treat for those who
         // use good quality ingredients :)
@@ -125,6 +125,8 @@ export default class Pastes extends Mod {
     // Consider making it a pastrie(?) instead of a paste. Create the paste first, then bake it into a pastrie.
     // Doing this means we could use eggs, and makes a bit more sense than carrying around a sticky paste in your pockets.
     @Register.item("StamPaste", {
+        // Drathy on projected quality bonus:
+        // Drathy: "based on the quality of the item, its base durability (set in item description), how heavy it is (relative to others of the same type)"
         use: [Registry<Pastes>().get("actionConsumeStamPaste")],
         weight: 0.5,
         recipe: {
