@@ -26,9 +26,23 @@ interface IUsersBuffData {
 }
 
 class StaminaBuff extends StatusEffect {
+    // Either make tickRate dynamic based on buff data or move to main Class.
+    // Will interfere with other mod classes among other player.
+    public tickRate: number = 5
+    // Refrences the buffData variable in the Pastes mod class.
+    public locPlayersData = Pastes.INST.buffData[this.entity.asPlayer!.identifier]
+
+    // "Calculate"(lol) the effect multiplier based on the passed in variables from the item used.
+    public effectTickAmount = Math.floor((this.locPlayersData.PasteBuffMinDura / this.locPlayersData.PasteBuffMaxDura * this.locPlayersData.PasteBuffQuality) + 1)
+
+    // base-1 from max durability
+    public buffCalc = Math.floor(this.locPlayersData.PasteBuffMaxDura / 10) * 2
+    // total calc from buffCalc, if less than 1, return 1, else base-1 from max durability multiplied by 5 as a treat for those who
+    // use good quality ingredients :)
+    public buffDuration = (this.buffCalc > 1 ? this.buffCalc : 1) * 5
     @Override
     getEffectRate(): number {
-        return 2
+        return this.tickRate
     }
     @Override
     getBadness(): StatusEffectBadness {
@@ -44,45 +58,33 @@ class StaminaBuff extends StatusEffect {
     }
     @Override
     onTick(): void {
-        log.info(game.time.ticks)
-        // Refrences the buffData variable in the Pastes mod class.
-        const locPlayersData = Pastes.INST.buffData[this.entity.asPlayer!.identifier]
-
-        // "Calculate"(lol) the effect multiplier based on the passed in variables from the item used.
-        const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality) + 1)
+        
         // Increase the stat Stamina by the effect multipler
-        this.entity.asPlayer?.stat.increase(Stat.Stamina, effectTickAmount, StatChangeReason.Normal)
+        this.entity.asPlayer?.stat.increase(Stat.Stamina, this.effectTickAmount, StatChangeReason.Normal)
         // call the notifyStat function to indicate that the stat has increased by the effect multiplier
-        this.entity.asPlayer?.notifyStat(StatNotificationType.Stamina, effectTickAmount)
+        this.entity.asPlayer?.notifyStat(StatNotificationType.Stamina, this.effectTickAmount)
 
         // Iterate the buff tick by 1 because infinite buffs would be a bit OP.
-        locPlayersData.PasteBuffTick++
+        this.locPlayersData.PasteBuffTick++
     }
     @Override
     shouldPass(): boolean {
-        // Stored ref to player data in locPlayersData
-        const locPlayersData: IStamPasteData = Pastes.INST.buffData[this.entity.asPlayer!.identifier]
-        // base-1 from max durability
-        const buffCalc = Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2
-        log.info('buffCalc Resolves: ', buffCalc)
-        // total calc from buffCalc, if less than 1, return 1, else base-1 from max durability multiplied by 5 as a treat for those who
-        // use good quality ingredients :)
-        const buffDuration = (buffCalc > 1 ? buffCalc : 1) * 5
-        log.info('buffDuration Resolves: ', `${locPlayersData.PasteBuffTick}/${buffDuration}`)
+        log.info('buffDuration Resolves: ', `${this.locPlayersData.PasteBuffTick}/${this.buffDuration}`)
+        log.info('buffCalc Resolves: ', this.buffCalc)
         // If local buff tick(iterated in onTick) greater or equal to buffDuration, set the players buffTick to 0 and remove the buff
         // else keep on truckin.
-        if (locPlayersData.PasteBuffTick >= buffDuration) {
-            locPlayersData.PasteBuffTick = 0
+        if (this.locPlayersData.PasteBuffTick >= this.buffDuration) {
+            this.locPlayersData.PasteBuffTick = 0
             return true
         }
         return false
     }
     @Override
     getDescription(): Translation {
-        const locPlayersData = Pastes.INST.buffData[this.entity.asPlayer!.identifier]
-        const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality) + 1)
         return super.getDescription()
-            .addArgs(effectTickAmount)
+            .addArgs(this.effectTickAmount)
+            .addArgs(this.tickRate)
+            .addArgs(this.buffDuration)
     }
 }
 
