@@ -103,7 +103,7 @@ class HungerBuff extends StatusEffect {
     @Override
     getIcon(): IStatusEffectIconDescription {
         return {
-            path: '../../mods/buff_pastes/static/image/item/test_8.png',
+            path: '../../mods/noita-wwm-pastes/static/image/item/test_8.png',
             frames: 1
         }
     }
