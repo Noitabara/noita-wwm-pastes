@@ -1,6 +1,6 @@
 import Mod from "mod/Mod";
 import Log from "utilities/Log";
-import StatusEffect, { IStatusEffectIconDescription } from "entity/status/StatusEffect";
+import StatusEffect, { IStatusEffectIconDescription, StatusEffectBadness } from "entity/status/StatusEffect";
 import { Stat } from "entity/IStats";
 import { ItemType, RecipeLevel, ItemTypeGroup } from "item/IItem"
 import { RecipeComponent } from "item/Items"
@@ -31,11 +31,15 @@ class StaminaBuff extends StatusEffect {
     getOptions(): IGameOptionsStatusEffect {
         return {
             untreatable: true,
-            effectRateMultiplier: 0.5,
+            effectRateMultiplier: 0.1,
             startWith: false,
             effectMultiplier: 0,
             passChanceMultiplier: 0
         }
+    }
+    @Override
+    getBadness(): StatusEffectBadness {
+        return StatusEffectBadness.Good
     }
     @Override
     getIcon(): IStatusEffectIconDescription {
