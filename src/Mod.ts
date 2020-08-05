@@ -57,6 +57,8 @@ class StaminaBuff extends StatusEffect {
         // call the notifyStat function to indicate that the stat has increased by the effect multiplier
         this.entity.asPlayer?.notifyStat(StatNotificationType.Stamina, effectTickAmount)
 
+        this.entity.asPlayer?.stat.setBonus(Stat.Weight, 100, StatChangeReason.BonusChanged)
+
         // Iterate the buff tick by 1 because infinite buffs would be a bit OP.
         locPlayersData.PasteBuffTick++
     }
@@ -74,6 +76,9 @@ class StaminaBuff extends StatusEffect {
         // If local buff tick(iterated in onTick) greater or equal to buffDuration, set the players buffTick to 0 and remove the buff
         // else keep on truckin.
         if (locPlayersData.PasteBuffTick >= buffDuration) {
+            // We'd likely have to pull in the bonus, then recalc vs current bonus(s) and return the proper amount to remove here.
+            // Ofc this belongs, in a different buff but. y'know. Testing ;)
+            this.entity.asPlayer?.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
             locPlayersData.PasteBuffTick = 0
             return true
         }
