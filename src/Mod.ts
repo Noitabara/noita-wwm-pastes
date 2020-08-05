@@ -131,7 +131,9 @@ export default class Pastes extends Mod {
             level: RecipeLevel.Simple,
             reputation: 0
         },
-        groups: [ItemTypeGroup.CookedFood]
+        groups: [ItemTypeGroup.CookedFood],
+        suffix: 'Beyoncé',
+        prefix: 'Da Bes'
     })
     public itemStamPaste: ItemType
 
