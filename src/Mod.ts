@@ -11,10 +11,11 @@ import { Action } from "entity/action/Action";
 import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
 import { SkillType } from "entity/IHuman";
 import Translation from "language/Translation";
-import { DoodadTypeGroup } from "doodad/IDoodad";
+// import { DoodadTypeGroup } from "doodad/IDoodad";
 import { HookMethod } from "mod/IHookHost";
 import ActionExecutor from "entity/action/ActionExecutor";
 import Player from "entity/player/Player";
+import { IGameOptionsStatusEffect } from "game/options/IGameOptions";
 
 // import HungerBuff from './Status_Effects/hungerStatusEffect'
 
@@ -46,6 +47,16 @@ interface IUserThirstBuffObjects extends Array<IUserBuffObject> { }
 // End testing custom tickrate idea
 
 class StaminaBuff extends StatusEffect {
+    @Override
+    getOptions(): IGameOptionsStatusEffect {
+        return {
+            untreatable: true,
+            effectRateMultiplier: 2,
+            startWith: false,
+            effectMultiplier: 0,
+            passChanceMultiplier: 0
+        }
+    }
     @Override
     getIcon(): IStatusEffectIconDescription {
         // Check in steam deploy for where this is actually resolving. Should know pretty fast that it's failing lol.
@@ -175,15 +186,16 @@ export default class Pastes extends Mod {
         weight: 0.5,
         recipe: {
             components: [
-                RecipeComponent(ItemTypeGroup.ContainerOfMedicinalWater, 1, 1, 0, true),
-                RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
-                RecipeComponent(ItemTypeGroup.Fruit, 1, 1, 0, true)
+                RecipeComponent(ItemType.Log, 1, 1, 0, true)
+                // RecipeComponent(ItemTypeGroup.ContainerOfMedicinalWater, 1, 1, 0, true),
+                // RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
+                // RecipeComponent(ItemTypeGroup.Fruit, 1, 1, 0, true)
             ],
-            requiredDoodad: DoodadTypeGroup.LitKiln,
+            // requiredDoodad: DoodadTypeGroup.LitKiln,
             // Implement new skill for 1.0.0-beta?
             skill: SkillType.Cooking,
             // Change to advanced later.
-            level: RecipeLevel.Advanced,
+            level: RecipeLevel.Simple,
             reputation: 0
         },
         groups: [ItemTypeGroup.CookedFood]
@@ -204,7 +216,6 @@ export default class Pastes extends Mod {
             player.notifyStat(StatNotificationType.Metabolism, 1)
             player.stat.increase(Stat.Thirst, 1, StatChangeReason.Normal)
             player.notifyStat(StatNotificationType.Thirst, 1)
-            // log.info("kek", player.inventory, value)
         })
     )
     public readonly actionTestExecuteAction: ActionType
