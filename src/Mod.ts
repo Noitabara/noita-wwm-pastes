@@ -11,7 +11,7 @@ import { Action } from "entity/action/Action";
 import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
 import { SkillType } from "entity/IHuman";
 import Translation from "language/Translation";
-import { IGameOptionsStatusEffect } from "game/options/IGameOptions";
+// import { IGameOptionsStatusEffect } from "game/options/IGameOptions";
 
 let log: Log
 
@@ -27,15 +27,19 @@ interface IUsersBuffData {
 }
 
 class StaminaBuff extends StatusEffect {
+    // @Override
+    // getOptions(): IGameOptionsStatusEffect {
+    //     return {
+    //         untreatable: true,
+    //         effectRateMultiplier: 0.1,
+    //         startWith: false,
+    //         effectMultiplier: 0,
+    //         passChanceMultiplier: 0
+    //     }
+    // }
     @Override
-    getOptions(): IGameOptionsStatusEffect {
-        return {
-            untreatable: true,
-            effectRateMultiplier: 0.1,
-            startWith: false,
-            effectMultiplier: 0,
-            passChanceMultiplier: 0
-        }
+    getEffectRate(): number {
+        return 1
     }
     @Override
     getBadness(): StatusEffectBadness {
