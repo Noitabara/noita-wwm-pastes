@@ -103,7 +103,7 @@ export class WeightBuff extends StatusEffect {
     shouldPass(): boolean {
         const locPlayersData: IWeightPasteData = Pastes.INST.buff_weight_data[this.entity.asPlayer!.identifier]
         const buffCalc: number = Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2
-        const buffDuration: number = (buffCalc > 1 ? buffCalc : 1) * 10
+        const buffDuration: number = (buffCalc > 1 ? buffCalc : 1) * 15
         if (locPlayersData.PasteBuffTick >= buffDuration) {
             this.entity.asPlayer?.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
             locPlayersData.PasteBuffTick = 0
@@ -115,7 +115,7 @@ export class WeightBuff extends StatusEffect {
     getDescription(): Translation {
         const locPlayersData: IWeightPasteData = Pastes.INST.buff_weight_data[this.entity.asPlayer!.identifier]
         const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality + 1) * 10)
-        const buffDuration: number = ((Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2) > 1 ? Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2 : 1) * 10
+        const buffDuration: number = ((Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2) > 1 ? Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2 : 1) * 15
         return super.getDescription()
             .addArgs(effectTickAmount)
             .addArgs(this.tick_rate * buffDuration)

@@ -10,6 +10,9 @@ import { Action } from "entity/action/Action";
 import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
 import { SkillType } from "entity/IHuman";
 import { Stat } from "entity/IStats";
+import { EventHandler } from "event/EventManager";
+import { EventBus } from "event/EventBuses";
+import Player from "entity/player/Player";
 
 let log: Log
 
@@ -21,6 +24,11 @@ export default class Pastes extends Mod {
     public onInitialize() {
         log = this.getLog()
         log.info('Hello, sweet world. ')
+    }
+    
+    @EventHandler(EventBus.Players, "die")
+    public onPlayerDeath(player: Player): void {
+        log.info('Lol you died.')
     }
 
     @Mod.instance<Pastes>("Buff Pastes")
@@ -57,6 +65,9 @@ export default class Pastes extends Mod {
         .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
         .setHandler((action, item) => {
             let player = action.executor
+            if (Pastes.INST.buff_weight_data[player.identifier].PasteBuffTick !== 0) {
+                return
+            }
             Pastes.INST.buff_weight_data[player.identifier] = {
                 PasteBuffTick: 0,
                 PasteBuffQuality: item.quality!,

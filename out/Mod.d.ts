@@ -3,10 +3,12 @@ import { IUStamBuffData, IUWeightBuffData } from "./storageEnums";
 import { ItemType } from "item/IItem";
 import { StatusType } from "entity/IEntity";
 import { ActionType } from "entity/action/IAction";
+import Player from "entity/player/Player";
 export default class Pastes extends Mod {
     buff_stam_data: IUStamBuffData;
     buff_weight_data: IUWeightBuffData;
     onInitialize(): void;
+    onPlayerDeath(player: Player): void;
     static readonly INST: Pastes;
     statusEffectStamBuff: StatusType;
     statusEffectWeightBuff: StatusType;

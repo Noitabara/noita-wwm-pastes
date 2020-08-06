@@ -100,7 +100,7 @@ define(["require", "exports", "./Mod", "entity/status/StatusEffect", "entity/ISt
             var _a;
             const locPlayersData = Mod_1.default.INST.buff_weight_data[this.entity.asPlayer.identifier];
             const buffCalc = Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2;
-            const buffDuration = (buffCalc > 1 ? buffCalc : 1) * 10;
+            const buffDuration = (buffCalc > 1 ? buffCalc : 1) * 15;
             if (locPlayersData.PasteBuffTick >= buffDuration) {
                 (_a = this.entity.asPlayer) === null || _a === void 0 ? void 0 : _a.stat.setBonus(IStats_1.Stat.Weight, 0, IEntity_1.StatChangeReason.BonusChanged);
                 locPlayersData.PasteBuffTick = 0;
@@ -111,7 +111,7 @@ define(["require", "exports", "./Mod", "entity/status/StatusEffect", "entity/ISt
         getDescription() {
             const locPlayersData = Mod_1.default.INST.buff_weight_data[this.entity.asPlayer.identifier];
             const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality + 1) * 10);
-            const buffDuration = ((Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2) > 1 ? Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2 : 1) * 10;
+            const buffDuration = ((Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2) > 1 ? Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2 : 1) * 15;
             return super.getDescription()
                 .addArgs(effectTickAmount)
                 .addArgs(this.tick_rate * buffDuration);
