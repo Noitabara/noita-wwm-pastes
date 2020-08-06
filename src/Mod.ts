@@ -67,9 +67,6 @@ export default class Pastes extends Mod {
         .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
         .setHandler((action, item) => {
             let player = action.executor
-            if (Pastes.INST.buff_weight_data[player.identifier]?.PasteBuffTick !== 0) {
-                return
-            }
             Pastes.INST.buff_weight_data[player.identifier] = {
                 PasteBuffTick: 0,
                 PasteBuffQuality: item.quality!,
@@ -79,6 +76,7 @@ export default class Pastes extends Mod {
             player.setStatus(Pastes.INST.statusEffectWeightBuff, true, StatusEffectChangeReason.Gained)
             const playerBuffRef: IWeightPasteData = Pastes.INST.buff_weight_data[player.identifier]
             const increaseWeightBy: number = Math.floor((playerBuffRef.PasteBuffMinDura / playerBuffRef.PasteBuffMaxDura * playerBuffRef.PasteBuffQuality + 1) * 10)
+            player.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
             player.stat.setBonus(Stat.Weight, increaseWeightBy, StatChangeReason.BonusChanged)
             itemManager.remove(item)
         })
