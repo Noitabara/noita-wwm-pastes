@@ -2,13 +2,17 @@
 	"extends": "English",
 	"dictionaries": {
 		"action": {
-			"modBuffPastesConsumeStamPaste": ["Eat", "Consume this beautiful paste, to gain a buff to your stamina!"]
+			"modBuffPastesConsumeStamPaste": ["Eat", "Consume this beautiful paste, to gain a buff to your stamina!"],
+			"modBuffPastesConsumeWeightPaste": ["Eat", "Consume this beautiful paste, to gain a buff to your weight!"]
+
 		},
 		"item": {
-			"modBuffPastesStamPaste": ["Mystical Stamina Paste", "Consume this beautiful paste, to gain a buff to your stamina!"]
+			"modBuffPastesStamPaste": ["Mystical Stamina Paste", "Consume this beautiful paste, to gain a buff to your stamina!"],
+			"modBuffPastesWeightPaste": ["Mystical Weight Paste", "Consume this beautiful paste, to gain a buff to your weight!"]
 		},
 		"statusEffect": {
-			"modBuffPastesStamBuff": ["Stamina Buff!", "buff", "You've got a buff to your Stamina!\nIt will regenerate {0} every {1} ticks for {2} iterations!"]
+			"modBuffPastesStamBuff": ["Stamina Buff!", "buff", "You've got a buff to your Stamina!\nIt will regenerate {0} every {1} ticks for {2} iterations!"],
+			"modBuffPastesWeightBuff": ["Weight Buff!", "buff", "You've got a buff to your Weight!\nIt will regenerate {0} every {1} ticks for {2} iterations!"]
 		}
 	}
 }

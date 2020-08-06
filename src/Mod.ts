@@ -1,7 +1,7 @@
 import Mod from "mod/Mod";
 import Log from "utilities/Log";
 import { IUStamBuffData, IUWeightBuffData } from "./storageEnums"
-import { StaminaBuff } from "./statuses"
+import { StaminaBuff, WeightBuff } from "./statuses"
 import { ItemType, RecipeLevel, ItemTypeGroup } from "item/IItem"
 import { RecipeComponent } from "item/Items"
 import { StatusType, EntityType, StatusEffectChangeReason } from "entity/IEntity";
@@ -27,6 +27,8 @@ export default class Pastes extends Mod {
 
     @Register.statusEffect("StamBuff", StaminaBuff)
     public statusEffectStamBuff: StatusType
+    @Register.statusEffect("WeightBuff", WeightBuff)
+    public statusEffectWeightBuff: StatusType
 
     @Register.action("ConsumeStamPaste", new Action(ActionArgument.Item)
         .setUsableBy(EntityType.Player)
@@ -43,12 +45,28 @@ export default class Pastes extends Mod {
 
             // We set the status here.
             player.setStatus(Pastes.INST.statusEffectStamBuff, true, StatusEffectChangeReason.Gained)
-            log.info(`Max durablity at ${item.quality}:`, itemManager.getDefaultDurability(player, item.weight, item.type, true), game.getQualityDurabilityBonus(item.quality!, itemManager.getDefaultDurability(player, item.weight, item.type, true), true))
             // Remove the item from inventory after using it.
             itemManager.remove(item)
         })
     )
     public readonly actionConsumeStamPaste: ActionType
+
+    @Register.action("ConsumeWeightPaste", new Action(ActionArgument.Item)
+        .setUsableBy(EntityType.Player)
+        .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
+        .setHandler((action, item) => {
+            let player = action.executor
+            Pastes.INST.buff_weight_data[player.identifier] = {
+                PasteBuffTick: 0,
+                PasteBuffQuality: item.quality!,
+                PasteBuffMinDura: item.minDur,
+                PasteBuffMaxDura: item.maxDur
+            }
+            player.setStatus(Pastes.INST.statusEffectWeightBuff, true, StatusEffectChangeReason.Gained)
+            itemManager.remove(item)
+        })
+    )
+    public readonly actionConsumeWeightPaste: ActionType
 
     // Consider making it a pastrie(?) instead of a paste. Create the paste first, then bake it into a pastrie.
     // Doing this means we could use eggs, and makes a bit more sense than carrying around a sticky paste in your pockets.
@@ -62,8 +80,8 @@ export default class Pastes extends Mod {
                 // RecipeComponent(ItemType.Log, 1, 1, 0, true)
                 RecipeComponent(ItemType.Dough, 1, 1, 0, true),
                 RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
-                RecipeComponent(ItemTypeGroup.Fruit, 1, 1, 0, true)
-                
+                RecipeComponent(ItemTypeGroup.Fruit, 4, 4, 0, true)
+
             ],
             // requiredDoodad: DoodadTypeGroup.LitKiln,
             // Implement new skill for 1.0.0-beta?
@@ -75,5 +93,27 @@ export default class Pastes extends Mod {
         groups: [ItemTypeGroup.CookedFood]
     })
     public itemStamPaste: ItemType
+
+    @Register.item("WeightPaste", {
+        use: [Registry<Pastes>().get("actionConsumeWeightPaste")],
+        weight: 0.5,
+        recipe: {
+            components: [
+                // RecipeComponent(ItemType.Log, 1, 1, 0, true)
+                RecipeComponent(ItemType.Dough, 1, 1, 0, true),
+                RecipeComponent(ItemTypeGroup.Storage, 1, 1, 0, true),
+                RecipeComponent(ItemTypeGroup.Vegetable, 2, 2, 0, true),
+                RecipeComponent(ItemTypeGroup.Fruit, 2, 2, 0, true)
+            ],
+            // requiredDoodad: DoodadTypeGroup.LitKiln,
+            // Implement new skill for 1.0.0-beta?
+            skill: SkillType.Cooking,
+            // Change to advanced later.
+            level: RecipeLevel.Simple,
+            reputation: 0
+        },
+        groups: [ItemTypeGroup.CookedFood]
+    })
+    public itemWeightPaste: ItemType
     // Testing stuff below here.
 }

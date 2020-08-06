@@ -9,6 +9,9 @@ export default class Pastes extends Mod {
     onInitialize(): void;
     static readonly INST: Pastes;
     statusEffectStamBuff: StatusType;
+    statusEffectWeightBuff: StatusType;
     readonly actionConsumeStamPaste: ActionType;
+    readonly actionConsumeWeightPaste: ActionType;
     itemStamPaste: ItemType;
+    itemWeightPaste: ItemType;
 }
