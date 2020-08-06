@@ -5,9 +5,6 @@ import { Stat } from "entity/IStats";
 import { StatChangeReason } from "entity/IEntity";
 import { StatNotificationType } from "renderer/INotifier";
 import Translation from "language/Translation";
-import Log from "utilities/Log";
-
-let log: Log
 
 // TODO: Fix "dirty" var assignments with class properties later- (onTick, shouldPass, getDescription).
 export class StaminaBuff extends StatusEffect {
@@ -111,7 +108,7 @@ export class WeightBuff extends StatusEffect {
         const locPlayersData: IWeightPasteData = Pastes.INST.buff_weight_data[this.entity.asPlayer!.identifier]
         const buffCalc: number = Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2
         const buffDuration: number = (buffCalc > 1 ? buffCalc : 1) * 5
-        log.info(locPlayersData.PasteBuffTick, buffDuration)
+        console.log(locPlayersData.PasteBuffTick, buffDuration)
         if (locPlayersData.PasteBuffTick >= buffDuration) {
             this.entity.asPlayer?.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
             this.entity.asPlayer?.notifyStat(StatNotificationType.Zero, 0)
