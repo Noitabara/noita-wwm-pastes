@@ -77,10 +77,10 @@ export default class Pastes extends Mod {
         weight: 0.5,
         recipe: {
             components: [
-                // RecipeComponent(ItemType.Log, 1, 1, 0, true)
-                RecipeComponent(ItemType.Dough, 1, 1, 0, true),
-                RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
-                RecipeComponent(ItemTypeGroup.Fruit, 4, 4, 0, true)
+                RecipeComponent(ItemType.Log, 1, 1, 0, true)
+                // RecipeComponent(ItemType.Dough, 1, 1, 0, true),
+                // RecipeComponent(ItemTypeGroup.Vegetable, 1, 1, 0, true),
+                // RecipeComponent(ItemTypeGroup.Fruit, 4, 4, 0, true)
 
             ],
             // requiredDoodad: DoodadTypeGroup.LitKiln,
@@ -99,11 +99,11 @@ export default class Pastes extends Mod {
         weight: 0.5,
         recipe: {
             components: [
-                // RecipeComponent(ItemType.Log, 1, 1, 0, true)
-                RecipeComponent(ItemType.Dough, 1, 1, 0, true),
-                RecipeComponent(ItemTypeGroup.Storage, 1, 1, 0, true),
-                RecipeComponent(ItemTypeGroup.Vegetable, 2, 2, 0, true),
-                RecipeComponent(ItemTypeGroup.Fruit, 2, 2, 0, true)
+                RecipeComponent(ItemType.Log, 1, 1, 0, true)
+                // RecipeComponent(ItemType.Dough, 1, 1, 0, true),
+                // RecipeComponent(ItemTypeGroup.Storage, 1, 1, 0, true),
+                // RecipeComponent(ItemTypeGroup.Vegetable, 2, 2, 0, true),
+                // RecipeComponent(ItemTypeGroup.Fruit, 2, 2, 0, true)
             ],
             // requiredDoodad: DoodadTypeGroup.LitKiln,
             // Implement new skill for 1.0.0-beta?
