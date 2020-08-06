@@ -95,7 +95,7 @@ export class WeightBuff extends StatusEffect {
         }
     }
     @Override
-    ontick(): void {
+    onTick(): void {
         const locPlayersData: IWeightPasteData = Pastes.INST.buff_weight_data[this.entity.asPlayer!.identifier]
         // Add in new equation for adding weight bonus.
         const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality) * 4)
@@ -108,7 +108,6 @@ export class WeightBuff extends StatusEffect {
         const locPlayersData: IWeightPasteData = Pastes.INST.buff_weight_data[this.entity.asPlayer!.identifier]
         const buffCalc: number = Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2
         const buffDuration: number = (buffCalc > 1 ? buffCalc : 1) * 5
-        console.log(locPlayersData.PasteBuffTick, buffDuration)
         if (locPlayersData.PasteBuffTick >= buffDuration) {
             this.entity.asPlayer?.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
             this.entity.asPlayer?.notifyStat(StatNotificationType.Zero, 0)

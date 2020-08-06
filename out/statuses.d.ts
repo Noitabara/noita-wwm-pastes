@@ -14,7 +14,7 @@ export declare class WeightBuff extends StatusEffect {
     getEffectRate(): number;
     getBadness(): StatusEffectBadness;
     getIcon(): IStatusEffectIconDescription;
-    ontick(): void;
+    onTick(): void;
     shouldPass(): boolean;
     getDescription(): Translation;
 }
