@@ -1,14 +1,15 @@
 import Mod from "mod/Mod";
 import Log from "utilities/Log";
-import { IUStamBuffData, IUWeightBuffData } from "./storageEnums"
+import { IUStamBuffData, IUWeightBuffData, IWeightPasteData } from "./storageEnums"
 import { StaminaBuff, WeightBuff } from "./statuses"
 import { ItemType, RecipeLevel, ItemTypeGroup } from "item/IItem"
 import { RecipeComponent } from "item/Items"
-import { StatusType, EntityType, StatusEffectChangeReason } from "entity/IEntity";
+import { StatusType, EntityType, StatusEffectChangeReason, StatChangeReason } from "entity/IEntity";
 import Register, { Registry } from "mod/ModRegistry";
 import { Action } from "entity/action/Action";
 import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
 import { SkillType } from "entity/IHuman";
+import { Stat } from "entity/IStats";
 
 let log: Log
 
@@ -63,6 +64,9 @@ export default class Pastes extends Mod {
                 PasteBuffMaxDura: item.maxDur
             }
             player.setStatus(Pastes.INST.statusEffectWeightBuff, true, StatusEffectChangeReason.Gained)
+            const playerBuffRef: IWeightPasteData = Pastes.INST.buff_weight_data[player.identifier]
+            const increaseWeightBy: number = Math.floor((playerBuffRef.PasteBuffMinDura / playerBuffRef.PasteBuffMaxDura * playerBuffRef.PasteBuffQuality + 1) * 10)
+            player.stat.setBonus(Stat.Weight, increaseWeightBy, StatChangeReason.BonusChanged)
             itemManager.remove(item)
         })
     )

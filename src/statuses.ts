@@ -77,7 +77,7 @@ export class StaminaBuff extends StatusEffect {
 }
 
 export class WeightBuff extends StatusEffect {
-    public tick_rate: number = 10
+    public tick_rate: number = 5
 
     @Override
     getEffectRate(): number {
@@ -97,9 +97,6 @@ export class WeightBuff extends StatusEffect {
     @Override
     onTick(): void {
         const locPlayersData: IWeightPasteData = Pastes.INST.buff_weight_data[this.entity.asPlayer!.identifier]
-        // Add in new equation for adding weight bonus.
-        const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality + 1) * 10)
-        this.entity.asPlayer?.stat.setBonus(Stat.Weight, effectTickAmount, StatChangeReason.BonusChanged)
         locPlayersData.PasteBuffTick++
     }
     @Override
