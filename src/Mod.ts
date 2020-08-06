@@ -19,7 +19,7 @@ export default class Pastes extends Mod {
 
     public onInitialize() {
         log = this.getLog()
-        log.info('Hello, sweet world.')
+        log.info('Hello, sweet world. ')
     }
 
     @Mod.instance<Pastes>("Buff Pastes")
