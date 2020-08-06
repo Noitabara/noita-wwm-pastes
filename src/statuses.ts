@@ -91,7 +91,7 @@ export class WeightBuff extends StatusEffect {
     getIcon(): IStatusEffectIconDescription {
         return {
             path: '../../mods/noita-wwm-pastes/static/image/item/weightpaste_8.png',
-            frames: 4
+            frames: 5
         }
     }
     @Override

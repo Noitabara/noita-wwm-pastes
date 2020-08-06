@@ -89,7 +89,7 @@ define(["require", "exports", "./Mod", "entity/status/StatusEffect", "entity/ISt
         getIcon() {
             return {
                 path: '../../mods/noita-wwm-pastes/static/image/item/weightpaste_8.png',
-                frames: 4
+                frames: 5
             };
         }
         onTick() {
