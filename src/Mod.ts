@@ -29,6 +29,8 @@ export default class Pastes extends Mod {
     @EventHandler(EventBus.Players, "die")
     public onPlayerDeath(player: Player): void {
         log.info('Lol you died.')
+        // This may well need tobe placed inside an action.
+        player.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
     }
 
     @Mod.instance<Pastes>("Buff Pastes")
@@ -65,7 +67,7 @@ export default class Pastes extends Mod {
         .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
         .setHandler((action, item) => {
             let player = action.executor
-            if (Pastes.INST.buff_weight_data[player.identifier].PasteBuffTick !== 0) {
+            if (Pastes.INST.buff_weight_data[player.identifier]?.PasteBuffTick !== 0) {
                 return
             }
             Pastes.INST.buff_weight_data[player.identifier] = {
