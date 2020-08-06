@@ -99,7 +99,7 @@ export class WeightBuff extends StatusEffect {
         const locPlayersData: IWeightPasteData = Pastes.INST.buff_weight_data[this.entity.asPlayer!.identifier]
         // Add in new equation for adding weight bonus.
         const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality) * 4)
-        console.log(locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality)
+        console.log((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura) * locPlayersData.PasteBuffQuality)
         console.log(effectTickAmount)
         this.entity.asPlayer?.stat.setBonus(Stat.Weight, effectTickAmount, StatChangeReason.BonusChanged)
         locPlayersData.PasteBuffTick++
