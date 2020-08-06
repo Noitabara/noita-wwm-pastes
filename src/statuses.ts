@@ -10,7 +10,7 @@ import Translation from "language/Translation";
 export class StaminaBuff extends StatusEffect {
     // Either make tickRate dynamic based on buff data or move to main Class.
     // Will interfere with other mod classes among other player.
-    public tickrate: number = 5
+    public tickrate: number = 15
     @Override
     getEffectRate(): number {
         return this.tickrate
@@ -77,7 +77,7 @@ export class StaminaBuff extends StatusEffect {
 }
 
 export class WeightBuff extends StatusEffect {
-    public tick_rate: number = 5
+    public tick_rate: number = 10
 
     @Override
     getEffectRate(): number {
@@ -90,7 +90,7 @@ export class WeightBuff extends StatusEffect {
     @Override
     getIcon(): IStatusEffectIconDescription {
         return {
-            path: '../../mods/noita-wwm-pastes/static/image/item/weightpaste_8',
+            path: '../../mods/noita-wwm-pastes/static/image/item/weightpaste_8.png',
             frames: 4
         }
     }
@@ -106,7 +106,7 @@ export class WeightBuff extends StatusEffect {
     shouldPass(): boolean {
         const locPlayersData: IWeightPasteData = Pastes.INST.buff_weight_data[this.entity.asPlayer!.identifier]
         const buffCalc: number = Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2
-        const buffDuration: number = (buffCalc > 1 ? buffCalc : 1) * 5
+        const buffDuration: number = (buffCalc > 1 ? buffCalc : 1) * 10
         if (locPlayersData.PasteBuffTick >= buffDuration) {
             this.entity.asPlayer?.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
             locPlayersData.PasteBuffTick = 0
@@ -117,11 +117,10 @@ export class WeightBuff extends StatusEffect {
     @Override
     getDescription(): Translation {
         const locPlayersData: IWeightPasteData = Pastes.INST.buff_weight_data[this.entity.asPlayer!.identifier]
-        const effectTickAmount: number = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality) + 1)
-        const buffDuration: number = ((Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2) > 1 ? Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2 : 1) * 5
+        const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality + 1) * 10)
+        const buffDuration: number = ((Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2) > 1 ? Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2 : 1) * 10
         return super.getDescription()
             .addArgs(effectTickAmount)
-            .addArgs(this.tick_rate)
-            .addArgs(buffDuration)
+            .addArgs(this.tick_rate * buffDuration)
     }
 }

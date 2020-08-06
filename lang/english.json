@@ -12,7 +12,7 @@
 		},
 		"statusEffect": {
 			"modBuffPastesStamBuff": ["Stamina Buff!", "buff", "You've got a buff to your Stamina!\nIt will regenerate {0} every {1} ticks for {2} iterations!"],
-			"modBuffPastesWeightBuff": ["Weight Buff!", "buff", "You've got a buff to your Weight!\nIt will regenerate {0} every {1} ticks for {2} iterations!"]
+			"modBuffPastesWeightBuff": ["Weight Buff!", "buff", "You've got a buff to your Weight!\nYour weight is increased by {0} for {1} iterations!"]
 		}
 	}
 }
