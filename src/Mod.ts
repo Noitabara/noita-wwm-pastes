@@ -76,8 +76,8 @@ export default class Pastes extends Mod {
             player.setStatus(Pastes.INST.statusEffectWeightBuff, true, StatusEffectChangeReason.Gained)
             const playerBuffRef: IWeightPasteData = Pastes.INST.buff_weight_data[player.identifier]
             const increaseWeightBy: number = Math.floor((playerBuffRef.PasteBuffMinDura / playerBuffRef.PasteBuffMaxDura * playerBuffRef.PasteBuffQuality + 1) * 10)
-            player.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
-            player.stat.setBonus(Stat.Weight, increaseWeightBy, StatChangeReason.BonusChanged)
+            player.stat.setBonus(Stat.Strength, 0, StatChangeReason.BonusChanged)
+            player.stat.setBonus(Stat.Strength, increaseWeightBy, StatChangeReason.BonusChanged)
             itemManager.remove(item)
         })
     )

@@ -58,7 +58,7 @@ export class StaminaBuff extends StatusEffect {
         if (locPlayersData.PasteBuffTick >= buffDuration) {
             // We'd likely have to pull in the bonus, then recalc vs current bonus(s) and return the proper amount to remove here.
             // Ofc this belongs, in a different buff but. y'know. Testing ;)
-            this.entity.asPlayer?.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
+            this.entity.asPlayer?.stat.setBonus(Stat.Strength, 0, StatChangeReason.BonusChanged)
             locPlayersData.PasteBuffTick = 0
             return true
         }
