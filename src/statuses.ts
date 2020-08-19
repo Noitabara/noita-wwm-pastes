@@ -3,7 +3,7 @@ import { IWeightPasteData, IStamPasteData } from "./storageEnums"
 import StatusEffect, { StatusEffectBadness, IStatusEffectIconDescription } from "entity/status/StatusEffect";
 import { Stat } from "entity/IStats";
 import { StatChangeReason } from "entity/IEntity";
-// import { StatNotificationType } from "renderer/INotifier";
+import { StatNotificationType } from "renderer/INotifier";
 import Translation from "language/Translation";
 
 // TODO: Fix "dirty" var assignments with class properties later- (onTick, shouldPass, getDescription).
@@ -32,14 +32,14 @@ export class StaminaBuff extends StatusEffect {
         // Refrences the buff_stam_data variable in the Pastes mod class.
         const locPlayersData = Pastes.INST.buff_stam_data[this.entity.asPlayer!.identifier]
 
-        // // "Calculate"(lol) the effect multiplier based on the passed in variables from the item used.
-        // const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality) + 1)
-        // // Increase the stat Stamina by the effect multipler
-        // this.entity.asPlayer?.stat.increase(Stat.Stamina, effectTickAmount, StatChangeReason.Normal)
-        // // call the notifyStat function to indicate that the stat has increased by the effect multiplier
-        // this.entity.asPlayer?.notifyStat(StatNotificationType.Stamina, effectTickAmount)
+        // "Calculate"(lol) the effect multiplier based on the passed in variables from the item used.
+        const effectTickAmount = Math.floor((locPlayersData.PasteBuffMinDura / locPlayersData.PasteBuffMaxDura * locPlayersData.PasteBuffQuality) + 1)
+        // Increase the stat Stamina by the effect multipler
+        this.entity.asPlayer?.stat.increase(Stat.Stamina, effectTickAmount, StatChangeReason.Normal)
+        // call the notifyStat function to indicate that the stat has increased by the effect multiplier
+        this.entity.asPlayer?.notifyStat(StatNotificationType.Stamina, effectTickAmount)
 
-        // this.entity.asPlayer?.stat.setBonus(Stat.Weight, 100, StatChangeReason.BonusChanged)
+        this.entity.asPlayer?.stat.setBonus(Stat.Weight, 100, StatChangeReason.BonusChanged)
 
         // Iterate the buff tick by 1 because infinite buffs would be a bit OP.
         locPlayersData.PasteBuffTick++
@@ -58,7 +58,7 @@ export class StaminaBuff extends StatusEffect {
         if (locPlayersData.PasteBuffTick >= buffDuration) {
             // We'd likely have to pull in the bonus, then recalc vs current bonus(s) and return the proper amount to remove here.
             // Ofc this belongs, in a different buff but. y'know. Testing ;)
-            this.entity.asPlayer?.stat.setBonus(Stat.Strength, 0, StatChangeReason.BonusChanged)
+            this.entity.asPlayer?.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
             locPlayersData.PasteBuffTick = 0
             return true
         }
@@ -105,7 +105,7 @@ export class WeightBuff extends StatusEffect {
         const buffCalc: number = Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2
         const buffDuration: number = (buffCalc > 1 ? buffCalc : 1) * 15
         if (locPlayersData.PasteBuffTick >= buffDuration) {
-            this.entity.asPlayer?.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
+            this.entity.asPlayer?.stat.setBonus(Stat.Strength, 0, StatChangeReason.BonusChanged)
             locPlayersData.PasteBuffTick = 0
             return true
         }
