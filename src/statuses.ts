@@ -23,7 +23,7 @@ export class StaminaBuff extends StatusEffect {
     getIcon(): IStatusEffectIconDescription {
         // TODO: Check in steam deploy for where this is actually resolving. Should know pretty fast that it's failing lol.
         return {
-            path: '../../mods/noita-wwm-pastes/static/image/item/stampaste_8.png',
+            path: 'stampaste_8.png',
             frames: 5
         }
     }
@@ -90,7 +90,7 @@ export class WeightBuff extends StatusEffect {
     @Override
     getIcon(): IStatusEffectIconDescription {
         return {
-            path: '../../mods/noita-wwm-pastes/static/image/item/weightpaste_8.png',
+            path: 'weightpaste_8.png',
             frames: 5
         }
     }
