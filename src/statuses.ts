@@ -107,6 +107,8 @@ export class WeightBuff extends StatusEffect {
         if (locPlayersData.PasteBuffTick >= buffDuration) {
             locPlayersData.PasteBuffEffects = 0
             locPlayersData.PasteBuffTick = 0
+            localPlayer.updateStrength()
+            localPlayer.updateTablesAndWeight("M")
             return true
         }
         return false

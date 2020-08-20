@@ -87,6 +87,7 @@ export default class Pastes extends Mod {
             let player = action.executor
             const playerBuffRef: IWeightPasteData = Pastes.INST.buff_weight_data[player.identifier]
             const increaseWeightBy: number = Math.floor((playerBuffRef.PasteBuffMinDura / playerBuffRef.PasteBuffMaxDura * playerBuffRef.PasteBuffQuality + 1) * 10)
+            log.info(increaseWeightBy)
             Pastes.INST.buff_weight_data[player.identifier] = {
                 PasteBuffTick: 1,
                 PasteBuffQuality: item.quality!,
