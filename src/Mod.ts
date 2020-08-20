@@ -13,6 +13,7 @@ import { SkillType } from "entity/IHuman";
 import { EventHandler } from "event/EventManager";
 import { EventBus } from "event/EventBuses";
 import Player from "entity/player/Player";
+import { HookMethod } from "mod/IHookHost";
 
 let log: Log
 
@@ -25,7 +26,7 @@ export default class Pastes extends Mod {
         log = this.getLog()
         log.info('Hello, sweet world. ')
     }
-    
+
     @EventHandler(EventBus.Players, "die")
     protected onPlayerDeath(player: Player): void {
         log.info('Lol you died.')
@@ -39,6 +40,19 @@ export default class Pastes extends Mod {
             return weight + this.buff_weight_data[player.identifier].PasteBuffEffects
         }
         return weight
+    }
+
+    @Override @HookMethod
+    public onPlayerJoin(player: Player) {
+        if (!this.buff_weight_data[player.identifier]) {
+            this.buff_weight_data[player.identifier] = {
+                PasteBuffTick: 0,
+                PasteBuffQuality: 0,
+                PasteBuffMinDura: 0,
+                PasteBuffMaxDura: 0,
+                PasteBuffEffects: 0
+            }
+        }
     }
 
     @Mod.instance<Pastes>("Buff Pastes")
@@ -61,7 +75,7 @@ export default class Pastes extends Mod {
                 PasteBuffMinDura: item.minDur,
                 PasteBuffMaxDura: item.maxDur
             }
-            
+
             // We set the status here.
             player.setStatus(Pastes.INST.statusEffectStamBuff, true, StatusEffectChangeReason.Gained)
             // Remove the item from inventory after using it.
@@ -87,7 +101,7 @@ export default class Pastes extends Mod {
             player.setStatus(Pastes.INST.statusEffectWeightBuff, true, StatusEffectChangeReason.Gained)
             player.updateStrength()
             player.updateTablesAndWeight("M")
-            
+
             itemManager.remove(item)
         })
     )
