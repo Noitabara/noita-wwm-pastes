@@ -85,16 +85,16 @@ export default class Pastes extends Mod {
         .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
         .setHandler((action, item) => {
             let player = action.executor
-            const playerBuffRef: IWeightPasteData = Pastes.INST.buff_weight_data[player.identifier]
-            const increaseWeightBy: number = Math.floor((playerBuffRef.PasteBuffMinDura / playerBuffRef.PasteBuffMaxDura * playerBuffRef.PasteBuffQuality + 1) * 10)
-            log.info(increaseWeightBy)
             Pastes.INST.buff_weight_data[player.identifier] = {
                 PasteBuffTick: 1,
                 PasteBuffQuality: item.quality!,
                 PasteBuffMinDura: item.minDur,
                 PasteBuffMaxDura: item.maxDur,
-                PasteBuffEffects: increaseWeightBy
+                PasteBuffEffects: 0
             }
+            const playerBuffRef: IWeightPasteData = Pastes.INST.buff_weight_data[player.identifier]
+            const increaseWeightBy: number = Math.floor((playerBuffRef.PasteBuffMinDura / playerBuffRef.PasteBuffMaxDura * playerBuffRef.PasteBuffQuality + 1) * 10)
+            Pastes.INST.buff_weight_data[player.identifier].PasteBuffEffects = increaseWeightBy
             player.setStatus(Pastes.INST.statusEffectWeightBuff, true, StatusEffectChangeReason.Gained)
             player.updateStrength()
             player.updateTablesAndWeight("M")
