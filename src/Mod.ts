@@ -28,6 +28,13 @@ export default class Pastes extends Mod {
     @EventHandler(EventBus.Players, "die")
     protected onPlayerDeath(player: Player): void {
         log.info('Lol you died.')
+        this.buff_weight_data[player.identifier] = {
+            PasteBuffTick: 0,
+            PasteBuffQuality: 0,
+            PasteBuffMinDura: 0,
+            PasteBuffMaxDura: 0,
+            PasteBuffEffects: 0
+        }
         // This may well need tobe placed inside an action.
         // player.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
     }
@@ -48,6 +55,7 @@ export default class Pastes extends Mod {
             log.info(weight, this.buff_weight_data[player.identifier].PasteBuffEffects)
             return weight + this.buff_weight_data[player.identifier].PasteBuffEffects
         }
+        log.info(weight, this.buff_weight_data[player.identifier].PasteBuffEffects)
         return weight
     }
 
@@ -95,10 +103,10 @@ export default class Pastes extends Mod {
             const playerBuffRef: IWeightPasteData = Pastes.INST.buff_weight_data[player.identifier]
             const increaseWeightBy: number = Math.floor((playerBuffRef.PasteBuffMinDura / playerBuffRef.PasteBuffMaxDura * playerBuffRef.PasteBuffQuality + 1) * 10)
             Pastes.INST.buff_weight_data[player.identifier].PasteBuffEffects = increaseWeightBy
+            player.setStatus(Pastes.INST.statusEffectWeightBuff, false, StatusEffectChangeReason.Passed)
             player.setStatus(Pastes.INST.statusEffectWeightBuff, true, StatusEffectChangeReason.Gained)
             player.updateStrength()
             player.updateTablesAndWeight("M")
-
             itemManager.remove(item)
         })
     )
