@@ -105,7 +105,7 @@ export class WeightBuff extends StatusEffect {
         const buffCalc: number = Math.floor(locPlayersData.PasteBuffMaxDura / 10) * 2
         const buffDuration: number = (buffCalc > 1 ? buffCalc : 1) * 15
         if (locPlayersData.PasteBuffTick >= buffDuration) {
-            this.entity.asPlayer?.stat.setBonus(Stat.Strength, 0, StatChangeReason.BonusChanged)
+            locPlayersData.PasteBuffEffects = 0
             locPlayersData.PasteBuffTick = 0
             return true
         }

@@ -4,12 +4,12 @@ import { IUStamBuffData, IUWeightBuffData, IWeightPasteData } from "./storageEnu
 import { StaminaBuff, WeightBuff } from "./statuses"
 import { ItemType, RecipeLevel, ItemTypeGroup } from "item/IItem"
 import { RecipeComponent } from "item/Items"
-import { StatusType, EntityType, StatusEffectChangeReason, StatChangeReason } from "entity/IEntity";
+import { StatusType, EntityType, StatusEffectChangeReason } from "entity/IEntity";
 import Register, { Registry } from "mod/ModRegistry";
 import { Action } from "entity/action/Action";
 import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
 import { SkillType } from "entity/IHuman";
-import { Stat } from "entity/IStats";
+// import { Stat } from "entity/IStats";
 import { EventHandler } from "event/EventManager";
 import { EventBus } from "event/EventBuses";
 import Player from "entity/player/Player";
@@ -27,10 +27,18 @@ export default class Pastes extends Mod {
     }
     
     @EventHandler(EventBus.Players, "die")
-    public onPlayerDeath(player: Player): void {
+    protected onPlayerDeath(player: Player): void {
         log.info('Lol you died.')
         // This may well need tobe placed inside an action.
         // player.stat.setBonus(Stat.Weight, 0, StatChangeReason.BonusChanged)
+    }
+
+    @EventHandler(EventBus.Players, "getMaxWeight")
+    protected returnPlayerWeight(player: Player, weight: number) {
+        if (this.buff_weight_data[player.identifier].PasteBuffEffects > 0) {
+            return weight + this.buff_weight_data[player.identifier].PasteBuffEffects
+        }
+        return weight
     }
 
     @Mod.instance<Pastes>("Buff Pastes")
@@ -38,8 +46,8 @@ export default class Pastes extends Mod {
 
     @Register.statusEffect("StamBuff", StaminaBuff)
     public statusEffectStamBuff: StatusType
-    // @Register.statusEffect("WeightBuff", WeightBuff)
-    // public statusEffectWeightBuff: StatusType
+    @Register.statusEffect("WeightBuff", WeightBuff)
+    public statusEffectWeightBuff: StatusType
 
     @Register.action("ConsumeStamPaste", new Action(ActionArgument.Item)
         .setUsableBy(EntityType.Player)
@@ -53,7 +61,7 @@ export default class Pastes extends Mod {
                 PasteBuffMinDura: item.minDur,
                 PasteBuffMaxDura: item.maxDur
             }
-
+            
             // We set the status here.
             player.setStatus(Pastes.INST.statusEffectStamBuff, true, StatusEffectChangeReason.Gained)
             // Remove the item from inventory after using it.
@@ -62,26 +70,28 @@ export default class Pastes extends Mod {
     )
     public readonly actionConsumeStamPaste: ActionType
 
-    // @Register.action("ConsumeWeightPaste", new Action(ActionArgument.Item)
-    //     .setUsableBy(EntityType.Player)
-    //     .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
-    //     .setHandler((action, item) => {
-    //         let player = action.executor
-    //         Pastes.INST.buff_weight_data[player.identifier] = {
-    //             PasteBuffTick: 0,
-    //             PasteBuffQuality: item.quality!,
-    //             PasteBuffMinDura: item.minDur,
-    //             PasteBuffMaxDura: item.maxDur
-    //         }
-    //         player.setStatus(Pastes.INST.statusEffectWeightBuff, true, StatusEffectChangeReason.Gained)
-    //         const playerBuffRef: IWeightPasteData = Pastes.INST.buff_weight_data[player.identifier]
-    //         const increaseWeightBy: number = Math.floor((playerBuffRef.PasteBuffMinDura / playerBuffRef.PasteBuffMaxDura * playerBuffRef.PasteBuffQuality + 1) * 10)
-    //         player.stat.setBonus(Stat.Strength, 0, StatChangeReason.BonusChanged)
-    //         player.stat.setBonus(Stat.Strength, increaseWeightBy, StatChangeReason.BonusChanged)
-    //         itemManager.remove(item)
-    //     })
-    // )
-    // public readonly actionConsumeWeightPaste: ActionType
+    @Register.action("ConsumeWeightPaste", new Action(ActionArgument.Item)
+        .setUsableBy(EntityType.Player)
+        .setUsableWhen(ActionUsability.Ghost, ActionUsability.Paused, ActionUsability.Delayed, ActionUsability.Moving)
+        .setHandler((action, item) => {
+            let player = action.executor
+            const playerBuffRef: IWeightPasteData = Pastes.INST.buff_weight_data[player.identifier]
+            const increaseWeightBy: number = Math.floor((playerBuffRef.PasteBuffMinDura / playerBuffRef.PasteBuffMaxDura * playerBuffRef.PasteBuffQuality + 1) * 10)
+            Pastes.INST.buff_weight_data[player.identifier] = {
+                PasteBuffTick: 1,
+                PasteBuffQuality: item.quality!,
+                PasteBuffMinDura: item.minDur,
+                PasteBuffMaxDura: item.maxDur,
+                PasteBuffEffects: increaseWeightBy
+            }
+            player.setStatus(Pastes.INST.statusEffectWeightBuff, true, StatusEffectChangeReason.Gained)
+            player.updateStrength()
+            player.updateTablesAndWeight("M")
+            
+            itemManager.remove(item)
+        })
+    )
+    public readonly actionConsumeWeightPaste: ActionType
 
     // Consider making it a pastrie(?) instead of a paste. Create the paste first, then bake it into a pastrie.
     // Doing this means we could use eggs, and makes a bit more sense than carrying around a sticky paste in your pockets.
@@ -109,26 +119,26 @@ export default class Pastes extends Mod {
     })
     public itemStamPaste: ItemType
 
-    // @Register.item("WeightPaste", {
-    //     use: [Registry<Pastes>().get("actionConsumeWeightPaste")],
-    //     weight: 0.5,
-    //     recipe: {
-    //         components: [
-    //             RecipeComponent(ItemType.Log, 1, 1, 0, true)
-    //             // RecipeComponent(ItemType.Dough, 1, 1, 0, true),
-    //             // RecipeComponent(ItemTypeGroup.Storage, 1, 1, 0, true),
-    //             // RecipeComponent(ItemTypeGroup.Vegetable, 2, 2, 0, true),
-    //             // RecipeComponent(ItemTypeGroup.Fruit, 2, 2, 0, true)
-    //         ],
-    //         // requiredDoodad: DoodadTypeGroup.LitKiln,
-    //         // Implement new skill for 1.0.0-beta?
-    //         skill: SkillType.Cooking,
-    //         // Change to advanced later.
-    //         level: RecipeLevel.Simple,
-    //         reputation: 0
-    //     },
-    //     groups: [ItemTypeGroup.CookedFood]
-    // })
-    // public itemWeightPaste: ItemType
-    // // Testing stuff below here.
+    @Register.item("WeightPaste", {
+        use: [Registry<Pastes>().get("actionConsumeWeightPaste")],
+        weight: 0.5,
+        recipe: {
+            components: [
+                RecipeComponent(ItemType.Log, 1, 1, 0, true)
+                // RecipeComponent(ItemType.Dough, 1, 1, 0, true),
+                // RecipeComponent(ItemTypeGroup.Storage, 1, 1, 0, true),
+                // RecipeComponent(ItemTypeGroup.Vegetable, 2, 2, 0, true),
+                // RecipeComponent(ItemTypeGroup.Fruit, 2, 2, 0, true)
+            ],
+            // requiredDoodad: DoodadTypeGroup.LitKiln,
+            // Implement new skill for 1.0.0-beta?
+            skill: SkillType.Cooking,
+            // Change to advanced later.
+            level: RecipeLevel.Simple,
+            reputation: 0
+        },
+        groups: [ItemTypeGroup.CookedFood]
+    })
+    public itemWeightPaste: ItemType
+    // Testing stuff below here.
 }

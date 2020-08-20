@@ -12,6 +12,7 @@ export interface IWeightPasteData {
     PasteBuffQuality: number;
     PasteBuffMaxDura: number;
     PasteBuffMinDura: number;
+    PasteBuffEffects: number;
 }
 export interface IUWeightBuffData {
     [key: string]: IWeightPasteData;
