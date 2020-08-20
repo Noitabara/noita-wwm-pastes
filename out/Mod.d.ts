@@ -10,7 +10,6 @@ export default class Pastes extends Mod {
     onInitialize(): void;
     protected onPlayerDeath(player: Player): void;
     protected returnPlayerWeight(player: Player, weight: number): number;
-    onPlayerJoin(player: Player): void;
     static readonly INST: Pastes;
     statusEffectStamBuff: StatusType;
     statusEffectWeightBuff: StatusType;

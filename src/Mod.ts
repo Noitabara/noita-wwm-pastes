@@ -9,11 +9,9 @@ import Register, { Registry } from "mod/ModRegistry";
 import { Action } from "entity/action/Action";
 import { ActionArgument, ActionType, ActionUsability } from "entity/action/IAction";
 import { SkillType } from "entity/IHuman";
-// import { Stat } from "entity/IStats";
 import { EventHandler } from "event/EventManager";
 import { EventBus } from "event/EventBuses";
 import Player from "entity/player/Player";
-import { HookMethod } from "mod/IHookHost";
 
 let log: Log
 
@@ -36,15 +34,8 @@ export default class Pastes extends Mod {
 
     @EventHandler(EventBus.Players, "getMaxWeight")
     protected returnPlayerWeight(player: Player, weight: number) {
-        if (this.buff_weight_data[player.identifier].PasteBuffEffects > 0) {
-            return weight + this.buff_weight_data[player.identifier].PasteBuffEffects
-        }
-        return weight
-    }
-
-    @Override @HookMethod
-    public onPlayerJoin(player: Player) {
         if (!this.buff_weight_data[player.identifier]) {
+            console.log('oof')
             this.buff_weight_data[player.identifier] = {
                 PasteBuffTick: 0,
                 PasteBuffQuality: 0,
@@ -53,6 +44,11 @@ export default class Pastes extends Mod {
                 PasteBuffEffects: 0
             }
         }
+
+        if (this.buff_weight_data[player.identifier].PasteBuffEffects > 0) {
+            return weight + this.buff_weight_data[player.identifier].PasteBuffEffects
+        }
+        return weight
     }
 
     @Mod.instance<Pastes>("Buff Pastes")
