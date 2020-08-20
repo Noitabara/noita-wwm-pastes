@@ -44,8 +44,8 @@ export default class Pastes extends Mod {
                 PasteBuffEffects: 0
             }
         }
-
         if (this.buff_weight_data[player.identifier].PasteBuffEffects > 0) {
+            log.info(weight, this.buff_weight_data[player.identifier].PasteBuffEffects)
             return weight + this.buff_weight_data[player.identifier].PasteBuffEffects
         }
         return weight
